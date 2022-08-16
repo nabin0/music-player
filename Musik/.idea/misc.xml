@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1565" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/drawable/ic_chevron_down.xml" value="0.1" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/drawable/ic_chevron_left.xml" value="0.1" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/drawable/ic_cil_loop_1.xml" value="0.1" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/drawable/ic_equalizer.xml" value="0.1565" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/drawable/ic_favourite.xml" value="0.1565" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/drawable/ic_feedback.xml" value="0.1565" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/drawable/ic_heart.xml" value="0.1565" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1565" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/drawable/ic_menu_hamburger.xml" value="0.1565" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/drawable/ic_music_icon.xml" value="0.1565" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/drawable/ic_online.xml" value="0.1565" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/drawable/ic_pause.xml" value="0.1565" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/drawable/ic_play.xml" value="0.1565" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/drawable/ic_playlist.xml" value="0.1565" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/drawable/ic_search.xml" value="0.1565" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/drawable/ic_settings.xml" value="0.1565" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/drawable/ic_shuffle.xml" value="0.1565" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/drawable/ic_skip_next.xml" value="0.1565" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/drawable/ic_skip_previous.xml" value="0.1565" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/drawable/ic_three_dots_vertical.xml" value="0.1565" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/drawable/play_pause_btn_background.xml" value="0.2075" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/drawable/prev_next_btn_background.xml" value="0.2075" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/layout/activity_album_details.xml" value="0.1718683197947841" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/layout/activity_play_song.xml" value="0.22" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/layout/activity_splash_screen.xml" value="0.1308876811594203" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/layout/album_item_layout.xml" value="0.33" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/layout/fragment_album_detail.xml" value="0.2" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/layout/fragment_album_list.xml" value="0.1718683197947841" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/layout/fragment_bottom_player.xml" value="0.25" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/layout/fragment_equalizer.xml" value="0.1308876811594203" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/layout/fragment_my_songs.xml" value="0.25" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/layout/fragment_online_songs.xml" value="0.1308876811594203" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/layout/fragment_play_lists.xml" value="0.1308876811594203" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/layout/fragment_search.xml" value="0.2" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/layout/song_item_layout_rv.xml" value="0.33" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/menu/action_bar_menu_items.xml" value="0.209375" />
+        <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/menu/bottom_navigation_view_items.xml" value="0.209375" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

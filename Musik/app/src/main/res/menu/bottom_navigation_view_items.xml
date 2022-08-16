@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/songsList"
+        android:title="@string/songs"
+        android:icon="@drawable/ic_baseline_playlist_play"/>
+
+    <item android:id="@+id/searchSongs"
+        android:title="@string/search"
+        android:icon="@drawable/ic_search"/>
+
+    <item android:id="@+id/playSongsOnline"
+        android:title="@string/online"
+        android:icon="@drawable/ic_online"/>
+
+    <item android:id="@+id/equalizerSetting"
+        android:title="@string/equalizer"
+        android:icon="@drawable/ic_equalizer"/>
+
+    <item android:id="@+id/album"
+        android:title="Album"
+        android:icon="@drawable/ic_baseline_album_24"/>
+</menu>

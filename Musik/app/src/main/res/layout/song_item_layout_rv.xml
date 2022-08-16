@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/songImage"
+        android:elevation="1dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:padding="4dp"
+        android:src="@drawable/music_logo"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/songNameTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:text="Believer"/>
+
+        <TextView
+            android:id="@+id/songArtistTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Imagine Dragons"/>
+
+        <TextView
+            android:id="@+id/songDurationTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:text="2:12"/>
+    </LinearLayout>
+
+</LinearLayout>

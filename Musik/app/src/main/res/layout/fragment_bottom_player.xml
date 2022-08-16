@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="10dp"
+    tools:context=".fragments.BottomPlayerFragment"
+    android:padding="5dp">
+
+    <ImageView
+        android:id="@+id/albumArtBottomFrag"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/ic_launcher_background" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/playPauseBottomFrag"
+        android:layout_toRightOf="@id/albumArtBottomFrag"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/songNameBottomFrag"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:layout_marginEnd="6dp"
+            android:maxLines="1"
+            android:text="Song name "
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/songArtistBottomFrag"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/songNameBottomFrag"
+            android:maxLines="1"
+            android:text="Singer name "
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/playNextBottomFrag"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/ic_baseline_skip_next" />
+
+    <ImageView
+        android:id="@+id/playPauseBottomFrag"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="10dp"
+        android:layout_toLeftOf="@id/playNextBottomFrag"
+        android:src="@drawable/ic_baseline_play_arrow" />
+
+
+</RelativeLayout>
