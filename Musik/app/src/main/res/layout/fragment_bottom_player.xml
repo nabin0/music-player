@@ -3,14 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:elevation="10dp"
+    android:elevation="8dp"
     tools:context=".fragments.BottomPlayerFragment"
     android:padding="5dp">
 
     <ImageView
         android:id="@+id/albumArtBottomFrag"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:src="@drawable/ic_launcher_background" />
 
     <LinearLayout
@@ -26,7 +26,7 @@
             android:id="@+id/songNameBottomFrag"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:layout_marginEnd="6dp"
             android:maxLines="1"
             android:text="Song name "
@@ -38,8 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/songNameBottomFrag"
             android:maxLines="1"
-            android:text="Singer name "
-            android:textStyle="bold" />
+            android:text="Singer name " />
 
     </LinearLayout>
 
@@ -60,7 +59,7 @@
         android:layout_centerVertical="true"
         android:layout_marginEnd="10dp"
         android:layout_toLeftOf="@id/playNextBottomFrag"
-        android:src="@drawable/ic_baseline_play_arrow" />
+        android:src="@drawable/ic_baseline_pause" />
 
 
 </RelativeLayout>

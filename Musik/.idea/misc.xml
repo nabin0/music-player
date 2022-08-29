@@ -42,6 +42,40 @@
         <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/layout/song_item_layout_rv.xml" value="0.33" />
         <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/menu/action_bar_menu_items.xml" value="0.209375" />
         <entry key="..\:/Users/nabin/Documents/Android/Musik/app/src/main/res/menu/bottom_navigation_view_items.xml" value="0.209375" />
+        <entry key="..\:/Users/nabin/Documents/AndroidStudioProjects/music-player/Musik/app/src/main/res/drawable/bottom_sheet_background.xml" value="0.2155" />
+        <entry key="..\:/Users/nabin/Documents/AndroidStudioProjects/music-player/Musik/app/src/main/res/drawable/ic_baseline_album_24.xml" value="0.1665" />
+        <entry key="..\:/Users/nabin/Documents/AndroidStudioProjects/music-player/Musik/app/src/main/res/drawable/ic_baseline_cancel_24.xml" value="0.1665" />
+        <entry key="..\:/Users/nabin/Documents/AndroidStudioProjects/music-player/Musik/app/src/main/res/drawable/ic_baseline_pause.xml" value="0.1665" />
+        <entry key="..\:/Users/nabin/Documents/AndroidStudioProjects/music-player/Musik/app/src/main/res/drawable/ic_baseline_play_arrow.xml" value="0.1665" />
+        <entry key="..\:/Users/nabin/Documents/AndroidStudioProjects/music-player/Musik/app/src/main/res/drawable/ic_baseline_playlist_play.xml" value="0.1665" />
+        <entry key="..\:/Users/nabin/Documents/AndroidStudioProjects/music-player/Musik/app/src/main/res/drawable/ic_baseline_repeat.xml" value="0.1665" />
+        <entry key="..\:/Users/nabin/Documents/AndroidStudioProjects/music-player/Musik/app/src/main/res/drawable/ic_baseline_skip_next.xml" value="0.1665" />
+        <entry key="..\:/Users/nabin/Documents/AndroidStudioProjects/music-player/Musik/app/src/main/res/drawable/ic_baseline_skip_previous.xml" value="0.1665" />
+        <entry key="..\:/Users/nabin/Documents/AndroidStudioProjects/music-player/Musik/app/src/main/res/drawable/ic_chevron_down.xml" value="0.1665" />
+        <entry key="..\:/Users/nabin/Documents/AndroidStudioProjects/music-player/Musik/app/src/main/res/drawable/ic_chevron_left.xml" value="0.1665" />
+        <entry key="..\:/Users/nabin/Documents/AndroidStudioProjects/music-player/Musik/app/src/main/res/drawable/ic_equalizer.xml" value="0.1665" />
+        <entry key="..\:/Users/nabin/Documents/AndroidStudioProjects/music-player/Musik/app/src/main/res/drawable/ic_favourite.xml" value="0.1665" />
+        <entry key="..\:/Users/nabin/Documents/AndroidStudioProjects/music-player/Musik/app/src/main/res/drawable/ic_heart.xml" value="0.1665" />
+        <entry key="..\:/Users/nabin/Documents/AndroidStudioProjects/music-player/Musik/app/src/main/res/drawable/ic_menu_hamburger.xml" value="0.1665" />
+        <entry key="..\:/Users/nabin/Documents/AndroidStudioProjects/music-player/Musik/app/src/main/res/drawable/ic_online.xml" value="0.1665" />
+        <entry key="..\:/Users/nabin/Documents/AndroidStudioProjects/music-player/Musik/app/src/main/res/drawable/ic_search.xml" value="0.1665" />
+        <entry key="..\:/Users/nabin/Documents/AndroidStudioProjects/music-player/Musik/app/src/main/res/drawable/ic_settings.xml" value="0.1665" />
+        <entry key="..\:/Users/nabin/Documents/AndroidStudioProjects/music-player/Musik/app/src/main/res/drawable/ic_shuffle.xml" value="0.1665" />
+        <entry key="..\:/Users/nabin/Documents/AndroidStudioProjects/music-player/Musik/app/src/main/res/drawable/ic_single_song_loop.xml" value="0.1665" />
+        <entry key="..\:/Users/nabin/Documents/AndroidStudioProjects/music-player/Musik/app/src/main/res/drawable/ic_three_dots_vertical.xml" value="0.1665" />
+        <entry key="..\:/Users/nabin/Documents/AndroidStudioProjects/music-player/Musik/app/src/main/res/layout/activity_album_details.xml" value="0.16" />
+        <entry key="..\:/Users/nabin/Documents/AndroidStudioProjects/music-player/Musik/app/src/main/res/layout/activity_main.xml" value="0.1718683197947841" />
+        <entry key="..\:/Users/nabin/Documents/AndroidStudioProjects/music-player/Musik/app/src/main/res/layout/activity_play_song.xml" value="0.1718683197947841" />
+        <entry key="..\:/Users/nabin/Documents/AndroidStudioProjects/music-player/Musik/app/src/main/res/layout/album_item_layout.xml" value="0.1718683197947841" />
+        <entry key="..\:/Users/nabin/Documents/AndroidStudioProjects/music-player/Musik/app/src/main/res/layout/fragment_album_list.xml" value="0.1718683197947841" />
+        <entry key="..\:/Users/nabin/Documents/AndroidStudioProjects/music-player/Musik/app/src/main/res/layout/fragment_bottom_player.xml" value="0.33" />
+        <entry key="..\:/Users/nabin/Documents/AndroidStudioProjects/music-player/Musik/app/src/main/res/layout/fragment_bottom_sheet_songs_list.xml" value="0.1718683197947841" />
+        <entry key="..\:/Users/nabin/Documents/AndroidStudioProjects/music-player/Musik/app/src/main/res/layout/fragment_equalizer.xml" value="0.1718683197947841" />
+        <entry key="..\:/Users/nabin/Documents/AndroidStudioProjects/music-player/Musik/app/src/main/res/layout/fragment_my_songs.xml" value="0.1718683197947841" />
+        <entry key="..\:/Users/nabin/Documents/AndroidStudioProjects/music-player/Musik/app/src/main/res/layout/fragment_online_songs.xml" value="0.1718683197947841" />
+        <entry key="..\:/Users/nabin/Documents/AndroidStudioProjects/music-player/Musik/app/src/main/res/layout/fragment_settings.xml" value="0.25" />
+        <entry key="..\:/Users/nabin/Documents/AndroidStudioProjects/music-player/Musik/app/src/main/res/layout/song_item_layout_rv.xml" value="0.25" />
+        <entry key="..\:/Users/nabin/Documents/AndroidStudioProjects/music-player/Musik/app/src/main/res/menu/bottom_navigation_view_items.xml" value="0.1718683197947841" />
       </map>
     </option>
   </component>

@@ -3,14 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#D34F4F"
     tools:context=".fragments.EqualizerFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:id="@+id/showMsg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center"
         android:textSize="30sp"
-        android:text="Equalizer will be added soon" />
+        android:textStyle="bold"
+        android:text="Opening Equalizer" />
 
 </FrameLayout>

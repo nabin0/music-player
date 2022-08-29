@@ -44,7 +44,7 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.Song
     public void onBindViewHolder(@NonNull SongViewHolder holder, int position) {
         holder.songName.setText(mSongs.get(position).getSongName());
         holder.songArtist.setText(mSongs.get(position).getArtistName());
-        holder.songDuration.setText(mSongs.get(position).getSongDuration());
+        holder.songDuration.setText(formattedSecs(Integer.parseInt(mSongs.get(position).getSongDuration())) + " min");
         Uri uri = Uri.parse(mSongs.get(position).getImagePath());
 
         // Setting album image
@@ -111,5 +111,21 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.Song
         mSongs = new ArrayList<>();
         mSongs.addAll(songsList);
         notifyDataSetChanged();
+    }
+    private String formattedSecs(int msecs) {
+        String formattedTime = "";
+
+        String secs = String.valueOf((msecs / 1000) % 60);
+        String mins = String.valueOf((msecs / 1000) / 60);
+        formattedTime = mins + ":" + secs;
+        if (mins.length() < 2) {
+            mins = "0" + mins;
+        }
+        if (secs.length() < 2) {
+            secs = "0" + secs;
+        }
+        formattedTime = mins + ":" + secs;
+
+        return formattedTime;
     }
 }

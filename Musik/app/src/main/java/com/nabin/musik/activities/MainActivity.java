@@ -1,6 +1,8 @@
 package com.nabin.musik.activities;
 
 
+import static com.nabin.musik.fragments.SettingsFragment.DARK_MODE_SP;
+
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -10,9 +12,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -26,8 +31,8 @@ import com.nabin.musik.Services.MyMusicPlayerService;
 import com.nabin.musik.fragments.AlbumFragment;
 import com.nabin.musik.fragments.EqualizerFragment;
 import com.nabin.musik.fragments.MySongsFragment;
-import com.nabin.musik.fragments.OnlineSongsFragment;
 import com.nabin.musik.fragments.SearchFragment;
+import com.nabin.musik.fragments.SettingsFragment;
 import com.nabin.musik.interfaces.SongListRecyclerViewItemClick;
 
 public class MainActivity extends AppCompatActivity implements SongListRecyclerViewItemClick {
@@ -55,6 +60,12 @@ public class MainActivity extends AppCompatActivity implements SongListRecyclerV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Check Theme Mode
+        SharedPreferences sharedPreferences = getSharedPreferences(DARK_MODE_SP, MODE_PRIVATE);
+        if (sharedPreferences.getBoolean("dark_mode", false)) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }
+
         // Initialize all the views
         initViews();
 
@@ -77,11 +88,12 @@ public class MainActivity extends AppCompatActivity implements SongListRecyclerV
                     setFragmentOnBottomItemClick(new MySongsFragment(), 1);
                 } else if (id == R.id.searchSongs) {
                     setFragmentOnBottomItemClick(new SearchFragment(), 1);
-                } else if (id == R.id.playSongsOnline) {
-                    setFragmentOnBottomItemClick(new OnlineSongsFragment(), 1);
+                } else if (id == R.id.settings) {
+                    setFragmentOnBottomItemClick(new SettingsFragment(), 1);
                 } else if (id == R.id.album) {
                     setFragmentOnBottomItemClick(new AlbumFragment(), 1);
                 } else {
+                    // Open built in equalizer
                     setFragmentOnBottomItemClick(new EqualizerFragment(), 1);
                 }
                 return true;
@@ -107,6 +119,8 @@ public class MainActivity extends AppCompatActivity implements SongListRecyclerV
             }
         }
 
+        // TODO: Handle Recreate Activity
+
     }
 
     @Override
@@ -114,7 +128,11 @@ public class MainActivity extends AppCompatActivity implements SongListRecyclerV
         super.onDestroy();
 
         //Unregister receiver
-        unregisterReceiver(broadcastReceiver);
+        try {
+            unregisterReceiver(broadcastReceiver);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initViews() {
@@ -189,5 +207,22 @@ public class MainActivity extends AppCompatActivity implements SongListRecyclerV
         Intent playSongIntent = new Intent(MainActivity.this, PlaySongActivity.class);
         playSongIntent.putExtra("position", position);
         startActivity(playSongIntent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 15 && resultCode == RESULT_OK) {
+            Toast.makeText(this, "run", Toast.LENGTH_SHORT).show();
+        } else {
+            Bundle bundle = new Bundle();
+            bundle.putString("eqFound", "Equalizer Not Found");
+            Fragment fragment = new EqualizerFragment();
+            fragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.frameContainerFrameLayout, fragment)
+                    .commit();
+        }
     }
 }

@@ -49,7 +49,7 @@ public class MyMusicPlayerService extends Service implements MediaPlayer.OnCompl
 
     private static final String ACTION_DESTROY_SERVICE = "destroy_foreground_service";
     private final MyBinder myBinder = new MyBinder();
-    private static MediaPlayer mMediaPlayer;
+    public static MediaPlayer mMediaPlayer;
     private ArrayList<SongModel> mSongsList = new ArrayList<>();
     private int mPosition = -1;
     private MusicActionInterface actionInterface;

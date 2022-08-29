@@ -9,9 +9,9 @@
         android:title="@string/search"
         android:icon="@drawable/ic_search"/>
 
-    <item android:id="@+id/playSongsOnline"
-        android:title="@string/online"
-        android:icon="@drawable/ic_online"/>
+    <item android:id="@+id/settings"
+        android:title="Settings"
+        android:icon="@drawable/ic_settings"/>
 
     <item android:id="@+id/equalizerSetting"
         android:title="@string/equalizer"

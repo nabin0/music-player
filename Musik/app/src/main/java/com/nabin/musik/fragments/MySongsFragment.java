@@ -103,7 +103,7 @@ public class MySongsFragment extends Fragment implements SongListRecyclerViewIte
         songsListRecyclerView.setLayoutManager(layoutManager);
 
         //Set decorator in list items
-        RecyclerViewItemDecorator decorator = new RecyclerViewItemDecorator(10);
+        RecyclerViewItemDecorator decorator = new RecyclerViewItemDecorator(14);
         songsListRecyclerView.addItemDecoration(decorator);
 
         //Set Adapter

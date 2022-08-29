@@ -2,7 +2,6 @@ package com.nabin.musik.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.content.BroadcastReceiver;
@@ -17,8 +16,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -28,11 +25,11 @@ import com.bumptech.glide.Glide;
 import com.nabin.musik.R;
 import com.nabin.musik.Services.MyMusicPlayerService;
 import com.nabin.musik.adapters.SongsListAdapter;
+import com.nabin.musik.fragments.BottomSheetSongsListFragment;
 import com.nabin.musik.interfaces.MusicActionInterface;
 import com.nabin.musik.models.SongModel;
 
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class PlaySongActivity extends AppCompatActivity implements View.OnClickListener,
@@ -43,7 +40,7 @@ public class PlaySongActivity extends AppCompatActivity implements View.OnClickL
     //Views
     private ImageView songArtImage;
     private ImageView favouriteBtnImage;
-    private ImageView songsListImage;
+    private ImageView songsListBottomSheetImageView;
     private ImageView playPauseBtnImage;
     private ImageView repeatBtnImage;
     private ImageView nextSongBtnImage;
@@ -195,7 +192,7 @@ public class PlaySongActivity extends AppCompatActivity implements View.OnClickL
     private void initViews() {
         songArtImage = findViewById(R.id.albumArtImage);
         favouriteBtnImage = findViewById(R.id.favouriteSongImage);
-        songsListImage = findViewById(R.id.songsListBtn);
+        songsListBottomSheetImageView = findViewById(R.id.bottomSheetSongsListBtn);
         playPauseBtnImage = findViewById(R.id.playPauseBtn);
         repeatBtnImage = findViewById(R.id.repeatBtnImage);
         nextSongBtnImage = findViewById(R.id.skipNextBtn);
@@ -211,7 +208,7 @@ public class PlaySongActivity extends AppCompatActivity implements View.OnClickL
     private void setListeners() {
         repeatBtnImage.setOnClickListener(this);
         upBtn.setOnClickListener(this);
-
+        songsListBottomSheetImageView.setOnClickListener(this);
     }
 
     @Override
@@ -221,6 +218,9 @@ public class PlaySongActivity extends AppCompatActivity implements View.OnClickL
             songPlayBehaviour();
         } else if (id == R.id.upBtnBackToMainActivity) {
             finish();
+        }else if(id == R.id.bottomSheetSongsListBtn){
+           BottomSheetSongsListFragment bottomSheetSongsListFragment =new BottomSheetSongsListFragment();
+           bottomSheetSongsListFragment.show(getSupportFragmentManager(), bottomSheetSongsListFragment.getTag());
         }
     }
 

@@ -179,7 +179,6 @@
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_marginStart="16dp"
-            android:background="@drawable/prev_next_btn_background"
             android:contentDescription="@string/app_name"
             android:padding="8dp"
             android:src="@drawable/ic_baseline_repeat"
@@ -192,7 +191,6 @@
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_marginEnd="16dp"
-            android:background="@drawable/prev_next_btn_background"
             android:contentDescription="@string/app_name"
             android:padding="4dp"
             android:src="@drawable/ic_baseline_skip_previous"
@@ -220,7 +218,6 @@
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_marginStart="16dp"
-            android:background="@drawable/prev_next_btn_background"
             android:contentDescription="@string/app_name"
             android:padding="4dp"
             android:src="@drawable/ic_baseline_skip_next"
@@ -229,11 +226,10 @@
             app:layout_constraintTop_toTopOf="@id/playPauseBtn" />
 
         <ImageView
-            android:id="@+id/songsListBtn"
+            android:id="@+id/bottomSheetSongsListBtn"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_marginEnd="16dp"
-            android:background="@drawable/prev_next_btn_background"
             android:contentDescription="@string/app_name"
             android:padding="8dp"
             android:src="@drawable/ic_baseline_playlist_play"
