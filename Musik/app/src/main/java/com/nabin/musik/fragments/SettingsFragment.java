@@ -35,21 +35,20 @@ public class SettingsFragment extends Fragment {
             mUiSwitchThemeMode.setChecked(true);
         }
 
-        mUiSwitchThemeMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                SharedPreferences.Editor editor = getActivity().getSharedPreferences(DARK_MODE_SP, Context.MODE_PRIVATE).edit();
-                if (b) {
-                    //Set Dark Mode
-                    editor.putBoolean("dark_mode",true);
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                } else {
-                    // Set Light Mode
-                    editor.putBoolean("dark_mode",false);
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                }
-                editor.apply();
+        mUiSwitchThemeMode.setOnCheckedChangeListener((compoundButton, b) -> {
+            SharedPreferences.Editor editor = getActivity().getSharedPreferences(DARK_MODE_SP, Context.MODE_PRIVATE).edit();
+            if (b) {
+                //Set Dark Mode
+                editor.putBoolean("dark_mode",true);
+                editor.putBoolean("recreate_activity", true);
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            } else {
+                // Set Light Mode
+                editor.putBoolean("dark_mode",false);
+                editor.putBoolean("recreate_activity", true);
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             }
+            editor.apply();
         });
 
         return view;

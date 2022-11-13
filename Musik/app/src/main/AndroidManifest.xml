@@ -18,27 +18,47 @@
         android:theme="@style/Theme.Musik"
         tools:targetApi="31">
         <activity
-            android:name=".activities.AlbumDetailsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activities.PlaySongActivity"
-            android:exported="false"/>
-        <activity
-            android:name=".activities.MainActivity"
-            android:exported="true"
-            android:launchMode="singleInstance">
+            android:name=".activities.SplashScreenActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
         </activity>
-
+        <activity
+            android:name=".activities.FavouriteMusicActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".activities.AlbumDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.PlaySongActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.MainActivity"
+            android:exported="true"
+            android:launchMode="singleInstance">
+        </activity>
         <service android:name=".Services.MyMusicPlayerService" />
 
         <receiver
             android:name=".receivers.NotificationReceiver"
             android:exported="true" />
+        <receiver
+            android:name=".receivers.HeadSetBroadcastReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.HEADSET_PLUG" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

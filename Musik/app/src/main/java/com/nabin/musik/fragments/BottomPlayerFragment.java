@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.nabin.musik.R;
 import com.nabin.musik.Services.MyMusicPlayerService;
 import com.nabin.musik.activities.MainActivity;
+import com.nabin.musik.activities.PlaySongActivity;
 
 public class BottomPlayerFragment extends Fragment implements ServiceConnection {
 
@@ -58,6 +59,16 @@ public class BottomPlayerFragment extends Fragment implements ServiceConnection 
             }
         });
 
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), PlaySongActivity.class);
+                intent.putExtra("position", MainActivity.currenstSongPositin);
+                intent.putExtra("from_activity", "bottom_fragment");
+                startActivity(intent);
+            }
+        });
+
         
         mNextSong.setOnClickListener(view12 -> {
             if(mMyMusicPlayerService != null){
@@ -93,7 +104,6 @@ public class BottomPlayerFragment extends Fragment implements ServiceConnection 
                     .into(mAlbumArt);
         }else{
             // show default data
-
         }
 
         // Bind service

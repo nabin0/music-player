@@ -21,12 +21,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.nabin.musik.R;
+import com.nabin.musik.activities.FavouriteMusicActivity;
+import com.nabin.musik.activities.MainActivity;
 import com.nabin.musik.activities.PlaySongActivity;
 import com.nabin.musik.adapters.SongsListAdapter;
 import com.nabin.musik.interfaces.SongListRecyclerViewItemClick;
@@ -38,9 +41,11 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Objects;
 
-public class MySongsFragment extends Fragment implements SongListRecyclerViewItemClick, SearchView.OnQueryTextListener {
+public class MySongsFragment extends Fragment implements SongListRecyclerViewItemClick {
     //Views
     public static ArrayList<SongModel> mAllSongs = new ArrayList<>();
+private CardView cardFavoriteSongs;
+private CardView cardAlbums;
 
     //Vars
     public static int STORAGE_PERMISSION_REQUEST_CODE = 55;
@@ -56,11 +61,6 @@ public class MySongsFragment extends Fragment implements SongListRecyclerViewIte
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-    }
-
-    private void addDummySongs() {
-        for (int i = 0; i < 20; ++i)
-            mAllSongs.add(new SongModel("song " + i, "null", "artist no " + i, "1:24"));
     }
 
     @Override
@@ -88,12 +88,15 @@ public class MySongsFragment extends Fragment implements SongListRecyclerViewIte
         }
 
         intiRecyclerView();
+        setClickListeners();
 
         return view;
     }
 
     private void intiViews(View view) {
         songsListRecyclerView = view.findViewById(R.id.songsListRv);
+        cardFavoriteSongs = view.findViewById(R.id.cardFavouriteSongs);
+        cardAlbums = view.findViewById(R.id.cardAlbums);
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -112,6 +115,18 @@ public class MySongsFragment extends Fragment implements SongListRecyclerViewIte
         mAdapter.notifyDataSetChanged();
     }
 
+    private void setClickListeners() {
+        cardFavoriteSongs.setOnClickListener(view -> {
+            Intent intent = new Intent(getContext(), FavouriteMusicActivity.class);
+            getContext().startActivity(intent);
+        });
+
+        cardAlbums.setOnClickListener(view -> {
+            ((MainActivity) getActivity()).replaceWithAlbumFragment();
+        });
+
+    }
+
 
     @Override
     public void onRecyclerItemClick(int position) {
@@ -123,10 +138,6 @@ public class MySongsFragment extends Fragment implements SongListRecyclerViewIte
     // Set Menu and Listen Clicks
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        MenuItem searchItem = menu.findItem(R.id.searchBar);
-        androidx.appcompat.widget.SearchView searchView = (SearchView) searchItem.getActionView();
-
-        searchView.setOnQueryTextListener(this);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -134,26 +145,6 @@ public class MySongsFragment extends Fragment implements SongListRecyclerViewIte
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // Handle Option click
         return super.onOptionsItemSelected(item);
-    }
-
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        String query = newText.toLowerCase(Locale.ROOT);
-        ArrayList<SongModel> filteredList = new ArrayList<>();
-
-        for (SongModel song : mAllSongs) {
-            if (song.getSongName().toLowerCase(Locale.ROOT).contains(query)) {
-                filteredList.add(song);
-            }
-        }
-        mAdapter.updateSongs(filteredList);
-        return true;
     }
 
     private void showPermissionRequestSnackbar() {
@@ -196,5 +187,3 @@ public class MySongsFragment extends Fragment implements SongListRecyclerViewIte
             });
 
 }
-
-

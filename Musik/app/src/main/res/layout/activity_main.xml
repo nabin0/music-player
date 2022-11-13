@@ -10,26 +10,46 @@
         android:id="@+id/frameContainerFrameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/bottomSongControlFragment" />
+        android:layout_above="@id/cardViewBottomControls" />
 
-    <FrameLayout
-        android:id="@+id/bottomSongControlFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/bottomNavigationView">
 
-        <fragment
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:name="com.nabin.musik.fragments.BottomPlayerFragment"
-            tools:layout="@layout/fragment_bottom_player"/>
-    </FrameLayout>
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationView"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewBottomControls"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        app:menu="@menu/bottom_navigation_view_items" />
+        android:elevation="10dp"
+        app:cardElevation="10dp"
+        app:cardCornerRadius="3dp">
+
+        <LinearLayout
+            android:id="@+id/bottomViewsLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/bottomSongControlFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/bottomNavigationView">
+
+                <fragment
+                    android:name="com.nabin.musik.fragments.BottomPlayerFragment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:layout="@layout/fragment_bottom_player" />
+            </FrameLayout>
+
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/bottomNavigationView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:elevation="0dp"
+                app:menu="@menu/bottom_navigation_view_items" />
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
 
 </RelativeLayout>

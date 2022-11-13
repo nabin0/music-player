@@ -36,6 +36,7 @@ import com.nabin.musik.R;
 import com.nabin.musik.activities.MainActivity;
 import com.nabin.musik.activities.PlaySongActivity;
 import com.nabin.musik.application.App;
+import com.nabin.musik.interfaces.HeadsetActionInterface;
 import com.nabin.musik.interfaces.MusicActionInterface;
 import com.nabin.musik.models.SongModel;
 import com.nabin.musik.receivers.NotificationReceiver;
@@ -47,12 +48,12 @@ import java.util.ArrayList;
 public class MyMusicPlayerService extends Service implements MediaPlayer.OnCompletionListener {
     private static final String TAG = "MyTag";
 
-    private static final String ACTION_DESTROY_SERVICE = "destroy_foreground_service";
     private final MyBinder myBinder = new MyBinder();
     public static MediaPlayer mMediaPlayer;
-    private ArrayList<SongModel> mSongsList = new ArrayList<>();
+    public ArrayList<SongModel> mSongsList = new ArrayList<>();
     private int mPosition = -1;
     private MusicActionInterface actionInterface;
+    private HeadsetActionInterface headsetActionInterface;
     private MediaSessionCompat mediaSessionCompat;
     private String action_name = null;
     private boolean mIsPlaying = false;
@@ -82,6 +83,7 @@ public class MyMusicPlayerService extends Service implements MediaPlayer.OnCompl
 
         mediaSession = new MediaSession(getBaseContext(), "mediasession");
         mediaSession.setActive(true);
+
     }
 
     public class MyBinder extends Binder {
@@ -106,6 +108,16 @@ public class MyMusicPlayerService extends Service implements MediaPlayer.OnCompl
         }
         if (action_name != null) {
             switch (action_name) {
+                case "play":
+                    if (headsetActionInterface != null) {
+                        headsetActionInterface.playSongOnHeadsetPluggedIn();
+                    }
+                    break;
+                case "pause":
+                    if (headsetActionInterface != null) {
+                       headsetActionInterface.pauseSongOnHeadsetPluggedOut();
+                    }
+                    break;
                 case "playPause":
                     if (actionInterface != null) {
                         actionInterface.playPauseSong();
@@ -153,6 +165,9 @@ public class MyMusicPlayerService extends Service implements MediaPlayer.OnCompl
         this.actionInterface = actionInterface;
     }
 
+    public void setHeadsetActionInterface(HeadsetActionInterface actionInterface){
+        this.headsetActionInterface = actionInterface;
+    }
     void playMedia(int position) {
         if (mMediaPlayer != null) {
             stop();
@@ -192,13 +207,13 @@ public class MyMusicPlayerService extends Service implements MediaPlayer.OnCompl
         mIsPlaying = false;
     }
 
-    public void playNextSong(){
+    public void playNextSong() {
         if (actionInterface != null) {
             actionInterface.playNextSong();
         }
     }
 
-    public void playPauseSong(){
+    public void playPauseSong() {
         if (actionInterface != null) {
             actionInterface.playPauseSong();
         }
@@ -218,7 +233,6 @@ public class MyMusicPlayerService extends Service implements MediaPlayer.OnCompl
 
     public boolean isPlaying() {
         return mIsPlaying;
-        // return mMediaPlayer.isPlaying();
     }
 
     public void seekTo(int position) {
@@ -295,14 +309,6 @@ public class MyMusicPlayerService extends Service implements MediaPlayer.OnCompl
             stopForegroundServiceNotification = PendingIntent.getBroadcast(this, 0, closeService, PendingIntent.FLAG_CANCEL_CURRENT);
         }
 
-        // Get Bitmap from uri
-//        Bitmap largeImage = null;
-//        byte[] picture = getAlbumArt(mSongsList.get(mPosition).getSongUri());
-//        Log.d("MyTag", "showNotification: " +mSongsList.get(mPosition).getImagePath().toString() );
-//        if (picture != null) {
-//            largeImage = BitmapFactory.decodeByteArray(picture, 0, picture.length);
-//        }
-
         Bitmap largeImage = getArtFromAlbumArtUri(getApplicationContext(), Uri.parse(mSongsList.get(mPosition).getImagePath()));
         mediaSessionCompat.setActive(true);
 
@@ -324,11 +330,6 @@ public class MyMusicPlayerService extends Service implements MediaPlayer.OnCompl
                 .setStyle(new androidx.media.app.NotificationCompat.MediaStyle().setMediaSession(mediaSessionCompat.getSessionToken()))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .build();
-
-//        notification.flags |= Notification.FLAG_NO_CLEAR;
-//        notification.flags |= Notification.DEFAULT_SOUND;
-//        notification.defaults = 0;
-
 
         //stopForeground(Service.STOP_FOREGROUND_REMOVE); //This is updating  large icon
         startForeground(1, notification);

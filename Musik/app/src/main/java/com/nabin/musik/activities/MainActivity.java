@@ -12,6 +12,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,6 +22,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SearchView;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -34,16 +38,20 @@ import com.nabin.musik.fragments.MySongsFragment;
 import com.nabin.musik.fragments.SearchFragment;
 import com.nabin.musik.fragments.SettingsFragment;
 import com.nabin.musik.interfaces.SongListRecyclerViewItemClick;
+import com.nabin.musik.receivers.HeadSetBroadcastReceiver;
 
 public class MainActivity extends AppCompatActivity implements SongListRecyclerViewItemClick {
     // Views
     private BottomNavigationView mBottomNavigationView;
+    private FrameLayout bottomFragmentFrame;
 
     //Vars
     public static final String SORT_SHARED_PREF_VALUE = "sort_by_shared_pref";
     public static final String SORT_MODE = "sort_mode";
     public static Boolean SHOW_BOTTOM_SONG_CONTROL = false;
     private LocalBroadcastManager broadcastManager;
+    BroadcastReceiver receiver = new HeadSetBroadcastReceiver();
+    public static Integer currenstSongPositin = 0;
 
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -75,6 +83,11 @@ public class MainActivity extends AppCompatActivity implements SongListRecyclerV
         intentFilter.addAction("close_app");
         broadcastManager.registerReceiver(broadcastReceiver, intentFilter);
 
+        IntentFilter headSetIntentFilter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
+        intentFilter.addAction(Intent.ACTION_HEADSET_PLUG);
+        registerReceiver(receiver, headSetIntentFilter);
+
+
         /*
          * Setting item selectListener on bottom navigation view.
          * Flag == 0 will add fragment
@@ -99,17 +112,28 @@ public class MainActivity extends AppCompatActivity implements SongListRecyclerV
                 return true;
             }
         });
-        mBottomNavigationView.setSelectedItemId(R.id.songsList);
+    }
 
+    public void replaceWithAlbumFragment() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.frameContainerFrameLayout, new AlbumFragment()).commit();
+        mBottomNavigationView.getMenu().getItem(4).setChecked(true);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        SharedPreferences darkModeSharedPref = getSharedPreferences(DARK_MODE_SP, MODE_PRIVATE);
+
+        if (darkModeSharedPref.getBoolean("recreate_activity", false)) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.frameContainerFrameLayout, new SettingsFragment()).commit();
+            mBottomNavigationView.getMenu().getItem(2).setChecked(true);
+            darkModeSharedPref.edit().putBoolean("recreate_activity",false).commit();
+        }else{
+            mBottomNavigationView.setSelectedItemId(R.id.songsList);
+        }
 
         //Get shared preference data for the bottom player
         SharedPreferences sharedPreferences = getSharedPreferences(MyMusicPlayerService.SONG_DETAIL_CONTROL_DATA, MODE_PRIVATE);
-
         if (sharedPreferences != null) {
             String songUri = sharedPreferences.getString(MyMusicPlayerService.SONG_URI, null);
             if (songUri != null) {
@@ -119,7 +143,11 @@ public class MainActivity extends AppCompatActivity implements SongListRecyclerV
             }
         }
 
-        // TODO: Handle Recreate Activity
+        if (PlaySongActivity.MUSIC_PLAYER_SERVICE_BOUND) {
+            bottomFragmentFrame.setVisibility(View.VISIBLE);
+        } else {
+            bottomFragmentFrame.setVisibility(View.GONE);
+        }
 
     }
 
@@ -130,6 +158,7 @@ public class MainActivity extends AppCompatActivity implements SongListRecyclerV
         //Unregister receiver
         try {
             unregisterReceiver(broadcastReceiver);
+            unregisterReceiver(receiver);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
@@ -137,6 +166,7 @@ public class MainActivity extends AppCompatActivity implements SongListRecyclerV
 
     private void initViews() {
         mBottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomFragmentFrame = findViewById(R.id.bottomSongControlFragment);
     }
 
     private void setFragmentOnBottomItemClick(Fragment fragment, int flag) {
@@ -154,12 +184,6 @@ public class MainActivity extends AppCompatActivity implements SongListRecyclerV
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.action_bar_menu_items, menu);
-
-        MenuItem searchItem = menu.findItem(R.id.searchBar);
-        androidx.appcompat.widget.SearchView searchView = (SearchView) searchItem.getActionView();
-        searchView.setMaxWidth(Integer.MAX_VALUE);
-        searchView.setQueryHint("Search Music...");
-
         return true;
     }
 
@@ -213,16 +237,10 @@ public class MainActivity extends AppCompatActivity implements SongListRecyclerV
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 15 && resultCode == RESULT_OK) {
-            Toast.makeText(this, "run", Toast.LENGTH_SHORT).show();
-        } else {
+        if (requestCode != 15 || resultCode != RESULT_OK) {
+            Toast.makeText(this, "Equalizer not found", Toast.LENGTH_SHORT).show();
             Bundle bundle = new Bundle();
             bundle.putString("eqFound", "Equalizer Not Found");
-            Fragment fragment = new EqualizerFragment();
-            fragment.setArguments(bundle);
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.frameContainerFrameLayout, fragment)
-                    .commit();
         }
     }
 }
