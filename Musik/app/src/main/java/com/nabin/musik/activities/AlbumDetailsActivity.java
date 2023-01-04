@@ -51,31 +51,18 @@ public class AlbumDetailsActivity extends AppCompatActivity implements SongListR
         mAlbumName.setText(albumName);
         Uri uri = Uri.parse(mAlbumSongs.get(0).getImagePath());
         Handler handler = new Handler();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            if (uri != null) {
-                                Glide.with(AlbumDetailsActivity.this)
-                                        .load(uri)
-                                        .placeholder(R.drawable.music_logo)
-                                        .into(mAlbumArt);
-                            } else {
-                                Glide.with(AlbumDetailsActivity.this)
-                                        .load(R.drawable.music_logo)
-                                        .into(mAlbumArt);
-                                Toast.makeText(AlbumDetailsActivity.this, "Image not found", Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
+        new Thread(() -> handler.post(() -> {
+            try {
+                if (uri != null) {
+                    Glide.with(AlbumDetailsActivity.this).load(uri).placeholder(R.drawable.music_logo).into(mAlbumArt);
+                } else {
+                    Glide.with(AlbumDetailsActivity.this).load(R.drawable.music_logo).into(mAlbumArt);
+                    Toast.makeText(AlbumDetailsActivity.this, "Image not found", Toast.LENGTH_SHORT).show();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        }).start();
+        })).start();
 
         // Set Recyclerview
         setRecyclerView();
@@ -101,6 +88,7 @@ public class AlbumDetailsActivity extends AppCompatActivity implements SongListR
     public void onRecyclerItemClick(int position) {
         Intent intent = new Intent(this, PlaySongActivity.class);
         intent.putExtra("position", position);
+        intent.putParcelableArrayListExtra("my_songs", mAlbumSongs);
         startActivity(intent);
     }
 

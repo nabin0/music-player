@@ -14,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -44,8 +45,8 @@ import java.util.Objects;
 public class MySongsFragment extends Fragment implements SongListRecyclerViewItemClick {
     //Views
     public static ArrayList<SongModel> mAllSongs = new ArrayList<>();
-private CardView cardFavoriteSongs;
-private CardView cardAlbums;
+    private CardView cardFavoriteSongs;
+    private CardView cardAlbums;
 
     //Vars
     public static int STORAGE_PERMISSION_REQUEST_CODE = 55;
@@ -132,6 +133,7 @@ private CardView cardAlbums;
     public void onRecyclerItemClick(int position) {
         Intent intent = new Intent(getActivity(), PlaySongActivity.class);
         intent.putExtra("position", position);
+        intent.putParcelableArrayListExtra("my_songs", mAllSongs);
         startActivity(intent);
     }
 
@@ -178,7 +180,6 @@ private CardView cardAlbums;
                 if (result) {
                     //Permission Granted
                     mAllSongs = (ArrayList<SongModel>) FetchSongs.getAllAudioFromDevice(getContext());
-                    // Toast.makeText(getActivity(), mAllSongs.get(0).getSongName(), Toast.LENGTH_SHORT).show();
                     mAdapter.updateSongs(mAllSongs);
                 } else {
                     //Permission Denied

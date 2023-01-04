@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -21,15 +20,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.widget.SearchView;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 import com.nabin.musik.R;
 import com.nabin.musik.Services.MyMusicPlayerService;
 import com.nabin.musik.fragments.AlbumFragment;
@@ -38,7 +34,10 @@ import com.nabin.musik.fragments.MySongsFragment;
 import com.nabin.musik.fragments.SearchFragment;
 import com.nabin.musik.fragments.SettingsFragment;
 import com.nabin.musik.interfaces.SongListRecyclerViewItemClick;
+import com.nabin.musik.models.SongModel;
 import com.nabin.musik.receivers.HeadSetBroadcastReceiver;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements SongListRecyclerViewItemClick {
     // Views
@@ -46,12 +45,13 @@ public class MainActivity extends AppCompatActivity implements SongListRecyclerV
     private FrameLayout bottomFragmentFrame;
 
     //Vars
+    public static ArrayList<SongModel> currentPlayingPlaylist = new ArrayList<>();
     public static final String SORT_SHARED_PREF_VALUE = "sort_by_shared_pref";
     public static final String SORT_MODE = "sort_mode";
     public static Boolean SHOW_BOTTOM_SONG_CONTROL = false;
     private LocalBroadcastManager broadcastManager;
     BroadcastReceiver receiver = new HeadSetBroadcastReceiver();
-    public static Integer currenstSongPositin = 0;
+    public static Integer currentSongPosition = 0;
 
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -73,7 +73,6 @@ public class MainActivity extends AppCompatActivity implements SongListRecyclerV
         if (sharedPreferences.getBoolean("dark_mode", false)) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         }
-
         // Initialize all the views
         initViews();
 
@@ -87,31 +86,25 @@ public class MainActivity extends AppCompatActivity implements SongListRecyclerV
         intentFilter.addAction(Intent.ACTION_HEADSET_PLUG);
         registerReceiver(receiver, headSetIntentFilter);
 
+        mBottomNavigationView.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.songsList) {
+                setFragmentOnBottomItemClick(new MySongsFragment(), 1);
+            } else if (id == R.id.searchSongs) {
+                setFragmentOnBottomItemClick(new SearchFragment(), 1);
+            } else if (id == R.id.settings) {
+                setFragmentOnBottomItemClick(new SettingsFragment(), 1);
+            } else if (id == R.id.album) {
+                setFragmentOnBottomItemClick(new AlbumFragment(), 1);
+            } else {
+                // Open built in equalizer
+                setFragmentOnBottomItemClick(new EqualizerFragment(), 1);
 
-        /*
-         * Setting item selectListener on bottom navigation view.
-         * Flag == 0 will add fragment
-         * Flag == 1 will replace fragment
-         */
-        mBottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int id = item.getItemId();
-                if (id == R.id.songsList) {
-                    setFragmentOnBottomItemClick(new MySongsFragment(), 1);
-                } else if (id == R.id.searchSongs) {
-                    setFragmentOnBottomItemClick(new SearchFragment(), 1);
-                } else if (id == R.id.settings) {
-                    setFragmentOnBottomItemClick(new SettingsFragment(), 1);
-                } else if (id == R.id.album) {
-                    setFragmentOnBottomItemClick(new AlbumFragment(), 1);
-                } else {
-                    // Open built in equalizer
-                    setFragmentOnBottomItemClick(new EqualizerFragment(), 1);
-                }
-                return true;
             }
+            return true;
         });
+        mBottomNavigationView.setSelectedItemId(R.id.songsList);
+
     }
 
     public void replaceWithAlbumFragment() {
@@ -127,9 +120,7 @@ public class MainActivity extends AppCompatActivity implements SongListRecyclerV
         if (darkModeSharedPref.getBoolean("recreate_activity", false)) {
             getSupportFragmentManager().beginTransaction().replace(R.id.frameContainerFrameLayout, new SettingsFragment()).commit();
             mBottomNavigationView.getMenu().getItem(2).setChecked(true);
-            darkModeSharedPref.edit().putBoolean("recreate_activity",false).commit();
-        }else{
-            mBottomNavigationView.setSelectedItemId(R.id.songsList);
+            darkModeSharedPref.edit().putBoolean("recreate_activity", false).commit();
         }
 
         //Get shared preference data for the bottom player
@@ -172,14 +163,10 @@ public class MainActivity extends AppCompatActivity implements SongListRecyclerV
     private void setFragmentOnBottomItemClick(Fragment fragment, int flag) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        if (flag == 0)
-            transaction.add(R.id.frameContainerFrameLayout, fragment);
-        else
-            transaction.replace(R.id.frameContainerFrameLayout, fragment);
+        if (flag == 0) transaction.add(R.id.frameContainerFrameLayout, fragment);
+        else transaction.replace(R.id.frameContainerFrameLayout, fragment);
         transaction.commit();
     }
-
-    // Set Menu and Listen Clicks
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

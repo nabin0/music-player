@@ -25,6 +25,7 @@ import android.os.IBinder;
 import android.os.ParcelFileDescriptor;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -83,7 +84,7 @@ public class MyMusicPlayerService extends Service implements MediaPlayer.OnCompl
 
         mediaSession = new MediaSession(getBaseContext(), "mediasession");
         mediaSession.setActive(true);
-
+        mSongsList = mAllSongs;
     }
 
     public class MyBinder extends Binder {
@@ -94,7 +95,6 @@ public class MyMusicPlayerService extends Service implements MediaPlayer.OnCompl
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
         mSongsList = mAllSongs;
         if (intent.hasExtra("currPosition")) {
             mPosition = intent.getIntExtra("currPosition", -1);
@@ -115,7 +115,7 @@ public class MyMusicPlayerService extends Service implements MediaPlayer.OnCompl
                     break;
                 case "pause":
                     if (headsetActionInterface != null) {
-                       headsetActionInterface.pauseSongOnHeadsetPluggedOut();
+                        headsetActionInterface.pauseSongOnHeadsetPluggedOut();
                     }
                     break;
                 case "playPause":
@@ -165,9 +165,10 @@ public class MyMusicPlayerService extends Service implements MediaPlayer.OnCompl
         this.actionInterface = actionInterface;
     }
 
-    public void setHeadsetActionInterface(HeadsetActionInterface actionInterface){
+    public void setHeadsetActionInterface(HeadsetActionInterface actionInterface) {
         this.headsetActionInterface = actionInterface;
     }
+
     void playMedia(int position) {
         if (mMediaPlayer != null) {
             stop();
@@ -184,6 +185,8 @@ public class MyMusicPlayerService extends Service implements MediaPlayer.OnCompl
 
     public void createMediaPlayer(int position) {
         mPosition = position;
+        mSongsList = mAllSongs;
+        Log.d(TAG, "createMediaPlayer: " + mSongsList.size()+ " path : "+ mSongsList.get(position).getSongUri());
         mMediaPlayer = MediaPlayer.create(getBaseContext(), Uri.parse(mSongsList.get(mPosition).getSongUri()));
 
         //Shared pref for bottom control
@@ -326,22 +329,11 @@ public class MyMusicPlayerService extends Service implements MediaPlayer.OnCompl
                 .addAction(R.drawable.ic_baseline_cancel_24, "CloseService", stopForegroundServiceNotification)
                 .setOnlyAlertOnce(true)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-//                .setStyle(new androidx.media.app.NotificationCompat.MediaStyle().setShowActionsInCompactView(0, 1, 2))
                 .setStyle(new androidx.media.app.NotificationCompat.MediaStyle().setMediaSession(mediaSessionCompat.getSessionToken()))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .build();
 
-        //stopForeground(Service.STOP_FOREGROUND_REMOVE); //This is updating  large icon
         startForeground(1, notification);
-
-
-    }
-
-    byte[] getAlbumArt(String path) {
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        retriever.setDataSource(path);
-        byte[] art = retriever.getEmbeddedPicture();
-        return art;
     }
 
     Bitmap getArtFromAlbumArtUri(Context context, Uri artUri) {

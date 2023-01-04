@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -25,8 +24,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.nabin.musik.R;
 import com.nabin.musik.Services.MyMusicPlayerService;
-import com.nabin.musik.adapters.SongsListAdapter;
-import com.nabin.musik.db.FavouriteSongsDao;
 import com.nabin.musik.db.RoomDb;
 import com.nabin.musik.fragments.BottomSheetSongsListFragment;
 import com.nabin.musik.interfaces.HeadsetActionInterface;
@@ -61,7 +58,6 @@ public class PlaySongActivity extends AppCompatActivity implements View.OnClickL
     //Vars
     public static ArrayList<SongModel> mAllSongs;
     private Handler mHandler = new Handler();
-    private int mSongPosition;
     private Thread playPauseThread, nextSongThread, previousSongThread;
     public static boolean FLAG_REPEAT_SONG = false;
     public static boolean FLAG_REPEAT_PLAYLIST = true;
@@ -97,8 +93,7 @@ public class PlaySongActivity extends AppCompatActivity implements View.OnClickL
         broadcastManager.registerReceiver(broadcastReceiver, intentFilter);
         database = RoomDb.getInstance(this);
         initViews();
-
-//        new FetchSongAsync(database.dao()).execute();
+        mAllSongs = new ArrayList<>();
         favSongsList = database.dao().getAllFavouriteSongs();
 
         getIntentData();
@@ -129,10 +124,16 @@ public class PlaySongActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
+    private void doUnbindService() {
+        if (MUSIC_PLAYER_SERVICE_BOUND == true) {
+            unbindService(PlaySongActivity.this);
+            MUSIC_PLAYER_SERVICE_BOUND = false;
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
-
         //Bind Service
         if (!MUSIC_PLAYER_SERVICE_BOUND) {
             Intent intent = new Intent(getApplicationContext(), MyMusicPlayerService.class);
@@ -145,11 +146,6 @@ public class PlaySongActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onPause() {
         super.onPause();
-//        if (MUSIC_PLAYER_SERVICE_BOUND) {
-//            unbindService(this);
-//            Log.d(TAG, "onPause: unbind called");
-//            MUSIC_PLAYER_SERVICE_BOUND = false;
-//        }
     }
 
     @Override
@@ -161,14 +157,16 @@ public class PlaySongActivity extends AppCompatActivity implements View.OnClickL
     private void getIntentData() {
         if (getIntent() != null) {
             if (getIntent().hasExtra("from_activity")) {
-                mSongPosition = getIntent().getIntExtra("position", 0);
-                MainActivity.currenstSongPositin = mSongPosition;
-                setCurrentSongDataToUIOnly(mSongPosition);
+                MainActivity.currentSongPosition = getIntent().getIntExtra("position", 0);
+                mAllSongs = MainActivity.currentPlayingPlaylist;
+                setCurrentSongDataToUIOnly(MainActivity.currentSongPosition);
             } else {
-                mSongPosition = getIntent().getIntExtra("position", 0);
-                mAllSongs = SongsListAdapter.mSongs;
-                MainActivity.currenstSongPositin = mSongPosition;
-                playNewSong(mSongPosition);
+                MainActivity.currentSongPosition = getIntent().getIntExtra("position", 0);
+                mAllSongs = getIntent().getParcelableArrayListExtra("my_songs");
+                Log.d("MyTag", "" + +mAllSongs.size() + " path : " + mAllSongs.get(MainActivity.currentSongPosition).getSongUri());
+                MainActivity.currentPlayingPlaylist = mAllSongs;
+                MainActivity.currentSongPosition = MainActivity.currentSongPosition;
+                playNewSong(MainActivity.currentSongPosition);
                 playPauseBtnImage.setImageResource(R.drawable.ic_baseline_pause);
             }
         }
@@ -194,16 +192,15 @@ public class PlaySongActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-
     private void playNewSong(int position) {
         isFavoriteSong = false;
-        MainActivity.currenstSongPositin = position;
+        MainActivity.currentSongPosition = position;
         if (mService != null) {
             if (mService.isPlaying()) {
                 mService.stop();
             }
             mService.release();
-            mService.createMediaPlayer(mSongPosition);
+            mService.createMediaPlayer(MainActivity.currentSongPosition);
             totalDuration.setText(formattedSecs(mService.getDuration()));
             seekBar.setMax(mService.getDuration());
             updateSeekBar();
@@ -211,7 +208,7 @@ public class PlaySongActivity extends AppCompatActivity implements View.OnClickL
             mService.onCompleted();
         } else {
             Intent intent = new Intent(PlaySongActivity.this, MyMusicPlayerService.class);
-            intent.putExtra("currPosition", mSongPosition);
+            intent.putExtra("currPosition", MainActivity.currentSongPosition);
             startService(intent);
         }
         seekBar.setProgress(0);
@@ -268,14 +265,14 @@ public class PlaySongActivity extends AppCompatActivity implements View.OnClickL
 
     private void addOrRemoveFavourite() {
         if (isFavoriteSong) {
-            Toast.makeText(this, "remove", Toast.LENGTH_SHORT).show();
-            database.dao().delete(mAllSongs.get(mSongPosition));
+            Toast.makeText(this, "Removed From Favorite", Toast.LENGTH_SHORT).show();
+            database.dao().delete(mAllSongs.get(MainActivity.currentSongPosition));
             favouriteBtnImage.setImageResource(R.drawable.ic_heart);
             isFavoriteSong = false;
         } else {
-            Toast.makeText(this, "added", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Added To Favorite", Toast.LENGTH_SHORT).show();
             favouriteBtnImage.setImageResource(R.drawable.ic_filled_heart);
-            database.dao().insert(mAllSongs.get(mSongPosition));
+            database.dao().insert(mAllSongs.get(MainActivity.currentSongPosition));
             isFavoriteSong = true;
         }
     }
@@ -355,16 +352,16 @@ public class PlaySongActivity extends AppCompatActivity implements View.OnClickL
 
     public void playPreviousSong() {
         if (FLAG_SHUFFLE) {
-            mSongPosition = ThreadLocalRandom.current().nextInt(0, mAllSongs.size());
+            MainActivity.currentSongPosition = ThreadLocalRandom.current().nextInt(0, mAllSongs.size());
         } else {
-            if (mSongPosition > 0) {
-                mSongPosition -= 1;
+            if (MainActivity.currentSongPosition > 0) {
+                MainActivity.currentSongPosition -= 1;
             } else {
-                mSongPosition = mAllSongs.size() - 1;
+                MainActivity.currentSongPosition = mAllSongs.size() - 1;
             }
         }
 
-        playNewSong(mSongPosition);
+        playNewSong(MainActivity.currentSongPosition);
         mService.showNotification(R.drawable.ic_baseline_pause);
     }
 
@@ -375,12 +372,7 @@ public class PlaySongActivity extends AppCompatActivity implements View.OnClickL
         nextSongThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                nextSongBtnImage.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        playNextSong();
-                    }
-                });
+                nextSongBtnImage.setOnClickListener(view -> playNextSong());
             }
         });
         nextSongThread.start();
@@ -388,16 +380,16 @@ public class PlaySongActivity extends AppCompatActivity implements View.OnClickL
 
     public void playNextSong() {
         if (FLAG_SHUFFLE) {
-            mSongPosition = ThreadLocalRandom.current().nextInt(0, mAllSongs.size());
+            MainActivity.currentSongPosition = ThreadLocalRandom.current().nextInt(0, mAllSongs.size());
         } else {
-            if (mSongPosition < mAllSongs.size() - 1) {
-                mSongPosition += 1;
+            if (MainActivity.currentSongPosition < mAllSongs.size() - 1) {
+                MainActivity.currentSongPosition += 1;
             } else {
-                mSongPosition = 0;
+                MainActivity.currentSongPosition = 0;
             }
         }
 
-        playNewSong(mSongPosition);
+        playNewSong(MainActivity.currentSongPosition);
         mService.showNotification(R.drawable.ic_baseline_pause);
     }
 
@@ -476,7 +468,6 @@ public class PlaySongActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onServiceDisconnected(ComponentName componentName) {
         mService.stop();
-        Toast.makeText(mService, "stopped", Toast.LENGTH_SHORT).show();
         MUSIC_PLAYER_SERVICE_BOUND = false;
         mService = null;
     }
@@ -500,35 +491,6 @@ public class PlaySongActivity extends AppCompatActivity implements View.OnClickL
             playPauseBtnImage.setImageResource(R.drawable.ic_baseline_play_arrow);
             mService.showNotification(R.drawable.ic_baseline_play_arrow);
             updateSeekBar();
-        }
-    }
-
-
-    private static class InsertSongAsync extends AsyncTask<SongModel, Void, Void> {
-        private FavouriteSongsDao dao;
-
-        private InsertSongAsync(FavouriteSongsDao dao) {
-            this.dao = dao;
-        }
-
-        @Override
-        protected Void doInBackground(SongModel... songModels) {
-            dao.insert(songModels[0]);
-            return null;
-        }
-    }
-
-    private static class DeleteSongAsync extends AsyncTask<SongModel, Void, Void> {
-        private FavouriteSongsDao dao;
-
-        private DeleteSongAsync(FavouriteSongsDao dao) {
-            this.dao = dao;
-        }
-
-        @Override
-        protected Void doInBackground(SongModel... songModels) {
-            dao.delete(songModels[0]);
-            return null;
         }
     }
 

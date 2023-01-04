@@ -32,8 +32,8 @@ public class SearchFragment extends Fragment implements TextWatcher {
     private EditText searchEditText;
     private RecyclerView mRecyclerView;
     private SongsListAdapter mAdapter;
-
-    private static ArrayList<SongModel> mFilteredSongs;
+    private ArrayList<SongModel> mFilteredSongs;
+    private static ArrayList<SongModel> mAllSongs;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -44,6 +44,7 @@ public class SearchFragment extends Fragment implements TextWatcher {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
+        mAllSongs = MySongsFragment.mAllSongs;
         mFilteredSongs = MySongsFragment.mAllSongs;
 
         searchEditText = view.findViewById(R.id.searchSongs);
@@ -54,13 +55,11 @@ public class SearchFragment extends Fragment implements TextWatcher {
         imm.showSoftInput(searchEditText, InputMethodManager.SHOW_IMPLICIT);
 
 
-        mAdapter = new SongsListAdapter(mFilteredSongs, getActivity(), new SongListRecyclerViewItemClick() {
-            @Override
-            public void onRecyclerItemClick(int position) {
-                Intent intent = new Intent(getActivity(), PlaySongActivity.class);
-                intent.putExtra("position", position);
-                startActivity(intent);
-            }
+        mAdapter = new SongsListAdapter(mAllSongs, getActivity(), position -> {
+            Intent intent = new Intent(getActivity(), PlaySongActivity.class);
+            intent.putExtra("position", position);
+            intent.putParcelableArrayListExtra("my_songs", mFilteredSongs);
+            startActivity(intent);
         });
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -68,7 +67,6 @@ public class SearchFragment extends Fragment implements TextWatcher {
         mRecyclerView.setAdapter(mAdapter);
 
         searchEditText.addTextChangedListener(this);
-
         return view;
     }
 
@@ -82,11 +80,12 @@ public class SearchFragment extends Fragment implements TextWatcher {
         String query = searchEditText.getText().toString().toLowerCase(Locale.ROOT);
         ArrayList<SongModel> filteredList = new ArrayList<>();
 
-        for (SongModel song : mFilteredSongs) {
+        for (SongModel song : mAllSongs) {
             if (song.getSongName().toLowerCase(Locale.ROOT).contains(query)) {
                 filteredList.add(song);
             }
         }
+        mFilteredSongs = filteredList;
         mAdapter.updateSongs(filteredList);
     }
 
