@@ -25,7 +25,7 @@ public class SongModel implements Parcelable {
     private String albumId;
     private String imagePath;
     private String audioPath;
-
+    
     public SongModel() {
     }
 
